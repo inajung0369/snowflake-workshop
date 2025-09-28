@@ -117,6 +117,7 @@ order by base_dt;
 ---------------------------------- 
 // data 변경
 select max(base_dt) from SF_KOSCOM_ETF_JITRADE_DAILY;
+select count(*) from market_info; -- 87385
 
 // TIGER 미국나스닥100 데이터 추가
 insert into SF_KOSCOM_ETF_JITRADE_DAILY
