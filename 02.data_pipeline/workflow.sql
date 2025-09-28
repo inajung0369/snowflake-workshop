@@ -121,16 +121,15 @@ select count(*) from market_info; -- 87385
 
 // TIGER 미국나스닥100 데이터 추가
 insert into SF_KOSCOM_ETF_JITRADE_DAILY
-values('2025-08-25','KR7133690008',6000,1076360,86041764600,175480,14020107350);
+values('2025-08-25','KR7133690008',6000,6705,661581676,6705,661581673);
 
 insert into SF_KOSCOM_ETF_JITRADE_DAILY
-values('2025-08-26','KR7133690008',6000,1076360,86041764600,175480,14020107350);
-
+values('2025-08-26','KR7133690008',6000,6705,661581676,6705,661581673);
 
 ---------------------------------- 
 // clone 
 
-create database demo_20250928
+create or replace database demo_20250928
 clone demo;
 
 insert into demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
@@ -145,30 +144,25 @@ select * from demo_20250928.magi_handson.market_info where base_dt='2025-08-27';
 ----------------------------------
 // time travel
 
-use demo.magi_handson;
+use demo_20250928.magi_handson;
 
 select * from snowflake.account_usage.query_history 
-where query_text ilike 'insert into SF_KOSCOM_ETF_JITRADE_DAILY%'
+where query_text ilike 'insert into demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY%'
 order by start_time desc;
 
-select * from SF_KOSCOM_ETF_JITRADE_DAILY
-before(statement => '01bf583a-0206-8b44-0076-d707041f7a6a');
+select * from demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
+at(timestamp => '2025-09-28 12:02:14.750 -0700'::timestamp_tz);
+-- at (offset => -60 * 5);
+-- before(statement => '01bf5bce-0001-0e0d-0001-06be00044802');
 // https://docs.snowflake.com/en/user-guide/data-time-travel#querying-historical-data
 
-create table SF_KOSCOM_ETF_JITRADE_DAILY_backup
+create table demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY_backup
 as
 select * from SF_KOSCOM_ETF_JITRADE_DAILY
-before(statement => '01bf583a-0206-8b44-0076-d707041f7a6a');
+at(timestamp => '2025-09-28 12:02:14.750 -0700'::timestamp_tz);
 
-alter table SF_KOSCOM_ETF_JITRADE_DAILY
-swap with SF_KOSCOM_ETF_JITRADE_DAILY_backup;
+alter table demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
+swap with demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY_backup;
 
-select * from SF_KOSCOM_ETF_JITRADE_DAILY
-where base_dt='2025-08-25' or base_dt='2025-08-26';
-
-
------------------------------------ 
-// dynamic table 재생성 
-
-
-select * from market_info limit 10;
+select * from demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
+where base_dt='2025-08-27';
