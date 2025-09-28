@@ -15,9 +15,20 @@ GRANT CREATE AGENT ON SCHEMA snowflake_intelligence.agents TO ROLE accountadmin;
 
 // API
 GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO ROLE accountadmin;
-GRANT USAGE ON CORTEX SEARCH SERVICE DEMO.MAGI_HANDSON.docs_search TO ROLE accountadmin;
+-- GRANT USAGE ON CORTEX SEARCH SERVICE DEMO.MAGI_HANDSON.docs_search TO ROLE accountadmin;
 
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
+
+-------------------------------------------------------- 
+// paring & chunking (trial 버전에서는 실행 안됨) 
+CREATE OR REPLACE NETWORK RULE pypi_network_rule
+MODE = EGRESS
+TYPE = HOST_PORT
+VALUE_LIST = ('pypi.org', 'pypi.python.org', 'pythonhosted.org', 'files.pythonhosted.org');
+
+CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION pypi_access_integration
+ALLOWED_NETWORK_RULES = (pypi_network_rule)
+ENABLED = true;
 
 -------------------------------------------------------- 
 
