@@ -98,3 +98,20 @@ SELECT PARSE_JSON(
   )
 )['results'] as results;
 
+------------------------------------ 
+// AI SQL
+select * from sf_koscom_etfmst limit 10;
+
+SELECT * FROM sf_koscom_etfmst
+WHERE AI_FILTER(CONCAT(base_idx_nm, '을 기반으로 하는 ETF 인', item_nm_kor, '가 미국 시장이나 미국 기업과 관련이 있어?')) limit 100;
+ 
+
+SELECT AI_COMPLETE(
+    'mistral-large',
+        CONCAT('너는 금융 전문가야.', base_idx_nm, ' 을 기반으로 하는 ETF 인 ', item_nm_kor, '의 주요 투자 대상(국가, 섹터)을 한국어로 요약해서 알려줘.')
+) from sf_koscom_etfmst limit 10;
+
+ SELECT AI_COMPLETE(
+    'mistral-large',
+        CONCAT(base_idx_nm, ' 을 기반으로 하는 ETF 인 ', item_nm_kor, '에 대해서 요약해서 알려줘')
+) from sf_koscom_etfmst limit 10;
