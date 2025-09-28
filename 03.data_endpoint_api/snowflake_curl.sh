@@ -6,8 +6,8 @@
 # ===========================================
 
 # 필수 설정값 - 여기를 수정하세요
-ACCOUNT="WQPKQED-NK88697"           # 예: abc123.us-east-1
-JWT_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+ACCOUNT="SFSEAPAC-KR_DEMO28"           # 예: abc123.us-east-1
+JWT_TOKEN="xxxxxxx"
 WAREHOUSE="COMPUTE_WH"             # 예: COMPUTE_WH
 DATABASE="DEMO"               # 선택사항
 SCHEMA="MAGI_HANDSON"                   # 선택사항 (보통 PUBLIC)

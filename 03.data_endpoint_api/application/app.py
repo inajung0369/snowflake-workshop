@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'snowflake-query-app-secret-key'
 
 # Snowflake 설정 (jwt_token_generator.py와 동일)
-ACCOUNT = "WQPKQED-NK88697"
+ACCOUNT = "SFSEAPAC-KR_DEMO28"
 USER = "API_USER"
 PRIVATE_KEY_FILE = "../rsa_key.p8"
 SNOWFLAKE_API_URL = f"https://{ACCOUNT}.snowflakecomputing.com/api/v2/statements"
