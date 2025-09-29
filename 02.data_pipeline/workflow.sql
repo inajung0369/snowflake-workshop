@@ -128,41 +128,44 @@ values('2025-08-26','KR7133690008',6000,6705,661581676,6705,661581673);
 
 ---------------------------------- 
 // clone 
-
-create or replace database demo_20250928
+// 전체 복제
+create or replace database demo_20250929
 clone demo;
 
-insert into demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
+insert into demo_20250929.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
 values('2025-08-27','KR7133690008',6000,1076360,86041764600,175480,14020107350);
 
 ALTER DYNAMIC TABLE demo.magi_handson.market_info REFRESH;
-ALTER DYNAMIC TABLE demo_20250928.magi_handson.market_info REFRESH;
+ALTER DYNAMIC TABLE demo_20250929.magi_handson.market_info REFRESH;
 
+select * from demo.magi_handson.market_info;
+
+//clone 이후 따로 움직임
 select * from demo.magi_handson.market_info where base_dt='2025-08-27';
-select * from demo_20250928.magi_handson.market_info where base_dt='2025-08-27';
+select * from demo_20250929.magi_handson.market_info where base_dt='2025-08-27';
 
 ----------------------------------
 // time travel
 
-use demo_20250928.magi_handson;
+use demo_20250929.magi_handson;
 
 select * from snowflake.account_usage.query_history 
-where query_text ilike 'insert into demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY%'
+where query_text ilike 'insert into demo_20250929.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY%'
 order by start_time desc;
 
-select * from demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
-at(timestamp => '2025-09-28 12:02:14.750 -0700'::timestamp_tz);
+select * from demo_20250929.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
+-- at(timestamp => '2025-09-29 12:02:14.750 -0700'::timestamp_tz);
 -- at (offset => -60 * 5);
--- before(statement => '01bf5bce-0001-0e0d-0001-06be00044802');
+ before(statement => '01bf5e3e-0001-0d2e-0000-000107926421');
 // https://docs.snowflake.com/en/user-guide/data-time-travel#querying-historical-data
 
-create table demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY_backup
+create table demo_20250929.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY_backup
 as
 select * from SF_KOSCOM_ETF_JITRADE_DAILY
-at(timestamp => '2025-09-28 12:02:14.750 -0700'::timestamp_tz);
+before(statement => '01bf5e3e-0001-0d2e-0000-000107926421');
 
-alter table demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
-swap with demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY_backup;
+alter table demo_20250929.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
+swap with demo_20250929.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY_backup;
 
-select * from demo_20250928.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
+select * from demo_20250929.magi_handson.SF_KOSCOM_ETF_JITRADE_DAILY
 where base_dt='2025-08-27';
